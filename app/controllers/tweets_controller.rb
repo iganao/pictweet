@@ -13,8 +13,12 @@ class TweetsController < ApplicationController
   end
 
   def create
-    # binding.pry
     Tweet.create(tweet_params)
+    if @tweet.save
+    else
+      #バリデーションに引っかかり保存されなければ、「新規投稿」の画面を呼び出す
+      render 'new'
+    end
   end
 
   def destroy
@@ -27,7 +31,12 @@ class TweetsController < ApplicationController
 
   def update
     tweet = Tweet.find(params[:id])
-    tweet.update(tweet_params)
+    #バリデーションに引っかからず更新されれば、「更新完了」の画面が呼び出される
+    if @tweet.update(tweet_params)
+    else
+      #バリデーションに引っかかり保存されなければ、「編集」の画面が呼び出される
+      render 'edit'
+    end
   end
 
   def show
